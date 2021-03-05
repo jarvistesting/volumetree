@@ -10,6 +10,7 @@ import Loader from "../components/Loader/Loader";
 import "./App.scss";
 import { connect } from "react-redux";
 import { setCurrentLang } from "../store/Lang/LangAction";
+import User from '../components/User/User';
 
 class App extends React.Component {
   // App contains routes and also wrapped with snackbar and intl for localization
@@ -26,6 +27,7 @@ class App extends React.Component {
           <Router history={history}>
             <MaterialSnackbar />
             <Navbar />
+            <User />
             {<Routes lang={lang} />}
           </Router>
         </div>
