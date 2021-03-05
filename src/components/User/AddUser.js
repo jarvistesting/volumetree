@@ -13,26 +13,48 @@ class User extends React.Component {
             address: '',
             friends: ''
         }
+    };
+
+    componentDidMount() {
+        if (this.props.user) {
+            this.setState({
+                ...this.props?.user,
+            })
+        }
     }
 
     handleChange = (e, name) => {
         this.setState({[name]: e.target.value})
-    }
+    };
 
     handleSubmit = (e) => {
         e.preventDefault();
+        const userDetails = {
+            name: this.state.name, email: this.state.email, address: this.state.address, friends: this.state.friends
+        }
 
-        const arr = JSON.parse(localStorage.getItem('user')) || [];
-        arr.push({id: new Date().getTime(), name: this.state.name, email: this.state.email, address: this.state.address, friends: this.state.friends});
+        let arr = JSON.parse(localStorage.getItem('user')) || [];
+        if (this.props.isEdit) {
+            arr = arr.map((item) => {
+                if (item.id === this.props?.user?.id) {
+                    console.log(item, this.props?.user?.id, 'fuck the code', userDetails)
+                    return {...item, ...userDetails};
+                }
+                return item;
+            })
+        } else {
+            arr.push({id: new Date().getTime(), ...userDetails});
+        }
+
 
         if (arr && arr.length) {
             localStorage.setItem('user', JSON.stringify(arr));
         }
         this.props.showUserList();
-    }
+    };
 
     render() {
-        console.log("Add USER", this.props);
+
         return(
             <>
                 <Paper elevation={3} style={{padding: '24px'}}>
@@ -45,8 +67,8 @@ class User extends React.Component {
                                     name="name"
                                     label="Name" 
                                     variant="outlined" 
-                                    fullWidth 
-                                    value={this.state.name}
+                                    fullWidth
+                                    defaultValue={this.props?.user?.name}
                                     onChange={(e) => this.handleChange(e, 'name')}
                                 />
                             </Grid>
@@ -58,7 +80,7 @@ class User extends React.Component {
                                     label="Email" 
                                     variant="outlined"
                                     fullWidth 
-                                    value={this.state.email}
+                                    defaultValue={this.props?.user?.email}
                                     onChange={(e) => this.handleChange(e, 'email')} />
                             </Grid>
                             <Grid item lg={8} md={8}>
@@ -67,7 +89,7 @@ class User extends React.Component {
                                     name="address" 
                                     label="Address" 
                                     variant="outlined" 
-                                    value={this.state.address}
+                                    defaultValue={this.props?.user?.address}
                                     fullWidth onChange={(e) => this.handleChange(e, 'address')} 
                                 />
                             </Grid>
@@ -79,7 +101,7 @@ class User extends React.Component {
                                     variant="outlined" 
                                     placeholder={'List friends with comma separated'} 
                                     fullWidth 
-                                    value={this.state.friends}
+                                    defaultValue={this.props?.user?.friends}
                                     onChange={(e) => this.handleChange(e, 'friends')} 
                                 />
                             </Grid>
@@ -95,9 +117,8 @@ class User extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log("testing", state);
     return {
-        user : state.User.user
+        user : state.User.user,
     }
 }
 

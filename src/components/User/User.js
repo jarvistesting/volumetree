@@ -20,7 +20,7 @@ class User extends React.Component {
         this.setState({listUser: !this.state.listUser, addUser: false, editUser: false});
     }
 
-    showAddUser = (isEdit = false) => {
+    showAddUser = (e, isEdit = false) => {
         this.setState({addUser: true, listUser: false, editUser: isEdit});
     }
 
@@ -47,7 +47,7 @@ class User extends React.Component {
 
                 {this.state.addUser ? (
                     <Box>
-                        <AddUser editUser={this.state.editUser} showUserList={this.showUserList} />
+                        <AddUser isEdit={this.state.editUser} showUserList={this.showUserList} isEdit={this.state.editUser} />
                     </Box>
                 ) : null}
 

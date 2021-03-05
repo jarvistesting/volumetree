@@ -31,6 +31,7 @@ class User extends React.Component {
 
     componentDidMount() {
         this.props.getUser();
+        this.props.editUser();
     }
 
     handleEdit = (e, id) => {
@@ -43,10 +44,10 @@ class User extends React.Component {
                 break;
             }
         }
-        console.log("edit user", user);
+
         this.props.editUser(user);
         setTimeout(() => {
-            this.props.showAddUser(true);
+            this.props.showAddUser(e, true);
         },500)
     }
 
